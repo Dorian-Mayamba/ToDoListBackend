@@ -15,12 +15,6 @@ class Task(models.Model):
         ('NotStarted', 'Not Started')
     )
     
-    def __init__(self, name, priority, status, **kwargs):
-    
-        self.name = name
-        self.priority = priority
-        self.status = status
-    
     name = models.CharField(max_length=100)
     priority = models.CharField(max_length=150)
     status = models.CharField(max_length=150, choices=STATUS, default=STATUS.NotStarted)

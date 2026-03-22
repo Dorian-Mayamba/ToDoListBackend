@@ -13,10 +13,15 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from datetime import timedelta
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.join(os.path.dirname(__file__), ".env")
 
+
+
+load_dotenv(BASE_DIR, ".env")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
@@ -32,12 +37,17 @@ ALLOWED_HOSTS = []
 AUTH_USER_MODEL = 'todoapi.User'
 
 ACCOUNT_EMAIL_VERIFICATION = 'none'
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_EMAIL_REQUIRED = True
+
+ACCOUNT_LOGIN_METHODS = {'email'}
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
 
 
 # Application definition
+
+AUTHENTICATION_BACKENDS = (
+"django.contrib.auth.backends.ModelBackend",
+"allauth.account.auth_backends.AuthenticationBackend"
+)
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -84,19 +94,17 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'todoproject.wsgi.application'
-
-
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
     'default': {
         'ENGINE' : 'django.db.backends.mysql',
-        'NAME' : f'{os.getenv('DATABASE_NAME')}',
-        'USER' : f'{os.getenv('DATABASE_USER')}',
-        'PASSWORD' : f'{os.getenv('DATABASE_PASSWORD')}',
-        'HOST' : f'{os.getenv('DATABASE_HOST')}',
-        'PORT' : f'{os.getenv('DATABASE_PORT')}',
+        'NAME' : os.getenv('DATABASE_NAME'),
+        'USER' : os.getenv('DATABASE_USER'),
+        'PASSWORD' : os.getenv('DATABASE_PASSWORD'),
+        'HOST' : os.getenv('DATABASE_HOST'),
+        'PORT' : os.getenv('DATABASE_PORT'),
         'OPTIONS' : {
             'init_command' : "SET sql_mode='STRICT_TRANS_TABLES'"
         }

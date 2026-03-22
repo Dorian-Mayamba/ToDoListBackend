@@ -1,6 +1,6 @@
 from rest_framework import serializers
+from dj_rest_auth import serializers as authSerializer
 from .models import Task, User
-from django.contrib.auth.hashers import make_password
 
 class UserSerializer(serializers.Serializer):
     first_name = serializers.CharField(max_length=255)
@@ -20,30 +20,15 @@ class UserSerializer(serializers.Serializer):
         user.save()
         
         return user
-    
-   
-class ChoiceField(serializers.Field):
-    def __init__(self, choices, **kwargs):
-        self.choices = choices
-        super(ChoiceField, self).__init__(**kwargs)
-    def to_representation(self, value):
-        return self.choices[value]
 
-    def to_internal_value(self, data):
-        return getattr(self.choices, data)
-        
-class TaskSerializer(serializers.Serializer):
-    name = serializers.CharField(max_length=200)
-    priority = serializers.CharField(max_length=200)
-    status = ChoiceField(choices=Task.STATUS)
+class CustomLoginSerializer(authSerializer.LoginSerializer):
     
-    def save(self, request):
-        new_task = Task(
-            name=self.data['name'],
-            priority=self.data['priority'],
-            status=self.data['status']
-        )
-        new_task.user = request.user
-        new_task.save()
-        return new_task
+    pass
+        
+class TaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        fields = ('name', 'priority', 'status')
+  
+    
     
