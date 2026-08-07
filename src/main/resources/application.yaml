@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: todoapp
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    # Uses Docker service name inside Docker, falls back to localhost:5434 locally
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5434/todo_db}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres_user}
+    password: ${SPRING_DATASOURCE_PASSWORD:secure_password}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true # Helpful for debugging SQL queries during development
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+jwt:
+  private-key: classpath:app.key
+  public-key: classpath:app.pub
+  ttl: 15
