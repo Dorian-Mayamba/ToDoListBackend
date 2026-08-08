@@ -1,6 +1,7 @@
 package com.todo.todoapp.services;
 
 import com.todo.todoapp.details.UserInfoDetails;
+import com.todo.todoapp.exception.notfound.TodoNotFoundException;
 import com.todo.todoapp.models.Category;
 import com.todo.todoapp.models.Todo;
 import com.todo.todoapp.requests.TodoRequest;
@@ -49,7 +50,7 @@ public class TodoService {
 
     public Todo findById(int id) {
         return todoRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new TodoNotFoundException("Could not find Todo"));
     }
 
     public TodoResponse updateTodo(int id, TodoRequest todoRequest, UserInfoDetails userInfoDetails, int userId) {

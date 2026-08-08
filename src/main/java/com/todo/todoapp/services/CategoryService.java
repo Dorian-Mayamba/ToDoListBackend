@@ -1,5 +1,6 @@
 package com.todo.todoapp.services;
 
+import com.todo.todoapp.exception.notfound.CategoryNotFoundException;
 import com.todo.todoapp.models.Category;
 import com.todo.todoapp.repositories.CategoryRepository;
 import com.todo.todoapp.requests.CategoryRequest;
@@ -7,11 +8,8 @@ import com.todo.todoapp.responses.CategoryResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
 public class CategoryService {
@@ -31,14 +29,14 @@ public class CategoryService {
         return ResponseEntity.ok(
                 new CategoryResponse(
                         categoryRepository.getById(id)
-                                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND))
+                                .orElseThrow(() -> new CategoryNotFoundException("Cannot find category"))
                 )
         );
     } // ToDo Create a category response mapper
 
     public Category getCategory (int id) {
         return categoryRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+                .orElseThrow(() -> new CategoryNotFoundException("Cannot find category"));
     }
 
     public ResponseEntity<CategoryResponse> addCategory(CategoryRequest categoryRequest) {
